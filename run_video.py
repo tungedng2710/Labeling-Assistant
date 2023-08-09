@@ -1,3 +1,11 @@
+"""
+My GitHub: https://github.com/tungedng2710
+Labeling Assistant using OpenClip foundation models
+For instant usage, just install
+    $ pip install open_clip_torch
+For advanced purposes, checkout the OpenClip official repository at:
+    https://github.com/mlfoundations/open_clip
+"""
 import cv2
 import os
 from PIL import Image
