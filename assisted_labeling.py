@@ -41,7 +41,7 @@ class OpenClipDataset(Dataset):
 
 def check_img_file(filename):
     """
-    Consider whether it's image file
+    Consider whether it's an image file
     """
     return filename.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif'))
 
@@ -70,18 +70,20 @@ def predict(model, inputs, classes, tokenizer, device):
 
 if __name__ == '__main__':
     # Config
-    root_dir = "./test_samples"
-    classes = ["baby", "children", "teenager", "adult", "senior"]
-
+    root_dir = "test_samples"
+    classes = ["fire or smoke", "none"]
     pretrained = ('ViT-L-14', 'commonpool_xl_s13b_b90k') # open_clip.list_pretrained()
     model, _, preprocess = open_clip.create_model_and_transforms(*pretrained)
     tokenizer = open_clip.get_tokenizer(pretrained[0])
 
-    device = torch.device("cuda:0")
-    batch_size = 1
+    device = torch.device("cpu")
+    batch_size = 4
     save = True # save results to file
 
-    # Inference
+    # Inference 
+    total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"Model: {pretrained[0]}, pretrained dataset: {pretrained[1]}")
+    print(f"Total params: {total_params}")
     start = time.time()
     predictions = []
     dataset = OpenClipDataset(root_dir, preprocess, classes, device)
@@ -92,7 +94,7 @@ if __name__ == '__main__':
             prediction = f"{paths[idx]} \t {results[idx].item()}"
             predictions.append(prediction)
     if save:
-        with open('results.txt', 'w') as f:
+        with open('results1.txt', 'w') as f:
             for prediction in predictions:
                 f.write(f"{prediction}\n")
 
